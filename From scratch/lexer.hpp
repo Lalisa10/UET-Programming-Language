@@ -134,7 +134,6 @@ public:
     }
 
 private:
-    // Đọc buffer tiếp theo khi cần
     void loadNextBuffer() {
         // Xác định buffer nào đang được sử dụng
         bool usingFirstBuffer = (forward < buffer + BUFFER_SIZE);

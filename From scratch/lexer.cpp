@@ -156,7 +156,6 @@ Token Lexer::scanIdentifier() {
         reader->advance();
     }
     
-    // Lấy lexeme từ lexemeBegin đến forward
     const string &lexeme = reader->getLexeme();
     
     // Kiểm tra từ khóa
@@ -170,7 +169,6 @@ Token Lexer::scanIdentifier() {
         if (!isalpha(lexeme[0])) {
             valid = false;
         } else {
-            // Tìm vị trí đầu tiên của số
             size_t i = 1;
             while (i < lexeme.size() && isalpha(lexeme[i])) {
                 i++;
@@ -201,7 +199,6 @@ Token Lexer::scanNumber() {
     }
 
     if (isalpha(reader->peek())) {
-        // Đọc nốt phần còn lại để báo lỗi
         while (isalnum(reader->peek())) {
             reader->advance();
         }
