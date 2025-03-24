@@ -24,7 +24,6 @@ string tokenTypeName(TokenType type) {
         case TOKEN_LEFT_BRACE: return "LEFT_BRACE";
         case TOKEN_RIGHT_BRACE: return "RIGHT_BRACE";
         case TOKEN_SEMICOLON: return "SEMICOLON";
-        case TOKEN_COMMA: return "COMMA";
         case TOKEN_IDENTIFIER: return "IDENTIFIER";
         case TOKEN_NUMBER: return "NUMBER";
         case TOKEN_EOF: return "EOF";
@@ -71,7 +70,6 @@ Token Lexer::nextToken() {
         case '{': return Token(TOKEN_LEFT_BRACE, "{", reader->getLine());
         case '}': return Token(TOKEN_RIGHT_BRACE, "}", reader->getLine());
         case ';': return Token(TOKEN_SEMICOLON, ";", reader->getLine());
-        case ',': return Token(TOKEN_COMMA, ",", reader->getLine());
         case '+': return Token(TOKEN_PLUS, "+", reader->getLine());
         case '*': return Token(TOKEN_MULTIPLY, "*", reader->getLine());
 

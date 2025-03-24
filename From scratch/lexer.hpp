@@ -22,9 +22,9 @@ struct Token {
 
     friend ostream& operator<<(ostream& os, const Token& token) {
         if (token.message.empty()) {
-            os << tokenTypeName(token.type) << " at line " << token.line;
+            os << tokenTypeName(token.type);
         } else {
-            os << tokenTypeName(token.type) << ' ' << token.message << " at line " << token.line;
+            os << tokenTypeName(token.type) << ' ' << token.message;
         }
         return os;
     }
