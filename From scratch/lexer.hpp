@@ -60,7 +60,7 @@ struct Token {
 
 class FileReader {
 private:
-    std::ifstream file;
+    ifstream file;
     static const int BUFFER_SIZE = 4096;
     char buffer[BUFFER_SIZE * 2 + 2]; // 2 buffers + 2 EOF markers
     char* lexemeBegin;               // Con trỏ đến điểm bắt đầu token
@@ -68,12 +68,13 @@ private:
     int line;
     int column;
     bool reachedEOF;
+    string lexemeBuffer;
 
 public:
-    FileReader(const std::string& filename) : line(1), column(0), reachedEOF(false) {
+    FileReader(const string& filename) : line(1), column(0), reachedEOF(false) {
         file.open(filename);
         if (!file.is_open()) {
-            throw std::runtime_error("Không thể mở file: " + filename);
+            throw runtime_error("Không thể mở file: " + filename);
         }
         
         // Đánh dấu cuối của mỗi buffer bằng ký tự EOF (để xác định khi nào cần đọc buffer tiếp theo)
@@ -90,6 +91,8 @@ public:
         // Khởi tạo con trỏ
         lexemeBegin = buffer;
         forward = buffer;
+
+        lexemeBuffer.reserve(1024);
     }
 
     ~FileReader() {
@@ -129,16 +132,15 @@ public:
     }
 
     // Lấy lexeme hiện tại (từ lexemeBegin đến forward)
-    string getLexeme() {
-        // Xử lý trường hợp lexeme nằm giữa hai buffer
+    const string& getLexeme() {
         if (lexemeBegin <= forward) {
-            return string(lexemeBegin, forward);
+            lexemeBuffer.assign(lexemeBegin, forward);
         } else {
-            // Lexeme nằm ở cuối buffer 1 và đầu buffer 2
-            string part1(lexemeBegin, buffer + BUFFER_SIZE);
-            string part2(buffer + BUFFER_SIZE + 1, forward);
-            return part1 + part2;
+            lexemeBuffer.clear();
+            lexemeBuffer.append(lexemeBegin, buffer + BUFFER_SIZE);
+            lexemeBuffer.append(buffer + BUFFER_SIZE + 1, forward);
         }
+        return lexemeBuffer;
     }
 
     // Đặt lại điểm bắt đầu token

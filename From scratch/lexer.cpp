@@ -81,10 +81,6 @@ Token Lexer::nextToken() {
             }
             return Token(TOKEN_ERROR, "Unexpected character", reader->getLine());
         }
-
-        case '\n':
-            // Bỏ qua newline và lấy token tiếp theo
-            return nextToken();
         
         default: {
             if (isdigit(c)) {
@@ -130,7 +126,7 @@ Token Lexer::scanIdentifier() {
     }
     
     // Lấy lexeme từ lexemeBegin đến forward
-    string lexeme = reader->getLexeme();
+    const string &lexeme = reader->getLexeme();
     
     // Kiểm tra từ khóa
     TokenType type = TOKEN_IDENTIFIER;
@@ -178,8 +174,7 @@ Token Lexer::scanNumber() {
             reader->advance();
         }
         
-        string lexeme = reader->getLexeme();
-        return Token(TOKEN_ERROR, "Invalid identifier starting with digit: " + lexeme, reader->getLine());
+        return Token(TOKEN_ERROR, "Invalid identifier starting with digit: " + reader->getLexeme(), reader->getLine());
     }
     
     // Lấy lexeme từ lexemeBegin đến forward
