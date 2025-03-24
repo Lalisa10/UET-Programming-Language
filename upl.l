@@ -42,22 +42,22 @@ comment         "/*"([^*]|\*+[^*/])*\*+"/"|"//".*
 "true"      {printf("TRUE\n");}
 "false"     {printf("FALSE\n");}
 
-"*"         {printf("MUL\n");}
-"+"         {printf("ADD\n");}
+"*"         {printf("MULTIPLY\n");}
+"+"         {printf("PLUS\n");}
 
-">"         {printf("GT\n");}
-">="        {printf("GE\n");}
-"=="        {printf("EQ\n");}
+">"         {printf("GREATER_THAN\n");}
+">="        {printf("GREATER_EQUAL\n");}
+"=="        {printf("EQUAL\n");}
 
 "="         {printf("ASSIGN\n");}
 
 ";"         {printf("SEMICOLON\n");}
 
-"("         {printf("OPEN_PARENTHESE\n");}
-")"         {printf("CLOSE_PARENTHESE\n");}
+"("         {printf("LEFT_PAREN\n");}
+")"         {printf("RIGHT_PAREN\n");}
 
-"{"         {printf("OPEN_CURLY\n");}
-"}"         {printf("CLOSE_CURLY\n");}
+"{"         {printf("LEFT_CURLY\n");}
+"}"         {printf("RIGHT_CURLY\n");}
 
 {true_id}        { printf("IDENTIFIER(%s)\n", yytext); }
 {candidate_id}   { printf("WRONG IDENTIFIER(%s)\n", yytext); }
