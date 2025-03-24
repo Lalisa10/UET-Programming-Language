@@ -46,14 +46,18 @@ string tokenTypeName(TokenType type) {
 
 struct Token {
     TokenType type;
-    string lexeme;
+    string message;
     int line;
     
-    Token(TokenType type, const string& lexeme, int line)
-        : type(type), lexeme(lexeme), line(line) {}
+    Token(TokenType type, int line, const string& message = "")
+        : type(type), line(line), message(message) {}
 
     friend ostream& operator<<(ostream& os, const Token& token) {
-        os << tokenTypeName(token.type) << " " << token.lexeme << " " << token.line;
+        if (token.message.empty()) {
+            os << tokenTypeName(token.type) << " at line " << token.line;
+        } else {
+            os << tokenTypeName(token.type) << ' ' << token.message << " at line " << token.line;
+        }
         return os;
     }
 };
@@ -185,9 +189,6 @@ private:
         
         // Cập nhật con trỏ forward
         forward = usingFirstBuffer ? buffer + BUFFER_SIZE + 1 : buffer;
-        
-        // Nếu lexemeBegin nằm ở buffer cũ, chúng ta phải xử lý việc sao chép
-        // để đảm bảo lexeme còn nguyên vẹn (việc này thường được làm khi bắt đầu token mới)
     }
 };
 

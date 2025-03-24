@@ -25,33 +25,33 @@ Token Lexer::nextToken() {
     reader->setLexemeBegin();
 
     if (reader->isAtEnd()) {
-        return Token(TOKEN_EOF, "", reader->getLine());
+        return Token(TOKEN_EOF, reader->getLine());
     }
 
     char c = reader->advance();
 
     switch (c) {
-        case '(': return Token(TOKEN_LEFT_PAREN, "(", reader->getLine());
-        case ')': return Token(TOKEN_RIGHT_PAREN, ")", reader->getLine());
-        case '{': return Token(TOKEN_LEFT_BRACE, "{", reader->getLine());
-        case '}': return Token(TOKEN_RIGHT_BRACE, "}", reader->getLine());
-        case ';': return Token(TOKEN_SEMICOLON, ";", reader->getLine());
-        case ',': return Token(TOKEN_COMMA, ",", reader->getLine());
-        case '+': return Token(TOKEN_PLUS, "+", reader->getLine());
-        case '*': return Token(TOKEN_MULTIPLY, "*", reader->getLine());
+        case '(': return Token(TOKEN_LEFT_PAREN, reader->getLine());
+        case ')': return Token(TOKEN_RIGHT_PAREN, reader->getLine());
+        case '{': return Token(TOKEN_LEFT_BRACE, reader->getLine());
+        case '}': return Token(TOKEN_RIGHT_BRACE, reader->getLine());
+        case ';': return Token(TOKEN_SEMICOLON, reader->getLine());
+        case ',': return Token(TOKEN_COMMA, reader->getLine());
+        case '+': return Token(TOKEN_PLUS, reader->getLine());
+        case '*': return Token(TOKEN_MULTIPLY, reader->getLine());
 
         case '>': {
             if (match('=')) {
-                return Token(TOKEN_GREATER_EQUAL, ">=", reader->getLine());
+                return Token(TOKEN_GREATER_EQUAL, reader->getLine());
             }
-            return Token(TOKEN_GREATER, ">", reader->getLine());
+            return Token(TOKEN_GREATER, reader->getLine());
         }
 
         case '=': {
             if (match('=')) {
-                return Token(TOKEN_EQUAL, "==", reader->getLine());
+                return Token(TOKEN_EQUAL, reader->getLine());
             }
-            return Token(TOKEN_ASSIGN, "=", reader->getLine());
+            return Token(TOKEN_ASSIGN, reader->getLine());
         }
 
         case '/': {
@@ -60,7 +60,6 @@ Token Lexer::nextToken() {
                 while (reader->peek() != '\n' && !reader->isAtEnd()) {
                     reader->advance();
                 }
-                // Gọi đệ quy để lấy token tiếp theo
                 return nextToken();
             } else if (match('*')) {
                 // Comment nhiều dòng
@@ -69,17 +68,16 @@ Token Lexer::nextToken() {
                 }
                 
                 if (reader->isAtEnd()) {
-                    return Token(TOKEN_ERROR, "Unterminated comment", reader->getLine());
+                    return Token(TOKEN_ERROR, reader->getLine(), "Unterminated comment");
                 }
                 
                 // Bỏ qua */ kết thúc
                 reader->advance(); // *
                 reader->advance(); // /
                 
-                // Gọi đệ quy để lấy token tiếp theo
                 return nextToken();
             }
-            return Token(TOKEN_ERROR, "Unexpected character", reader->getLine());
+            return Token(TOKEN_ERROR, reader->getLine(), "Unexpected character");
         }
         
         default: {
@@ -88,7 +86,7 @@ Token Lexer::nextToken() {
             } else if (isalpha(c)) {
                 return scanIdentifier();
             } else {
-                return Token(TOKEN_ERROR, "Unexpected character '" + string(1, c) + "'", reader->getLine());
+                return Token(TOKEN_ERROR, reader->getLine(), "Unexpected character \'" + string(1, c) + "\'");
             }
         }
     }
@@ -132,6 +130,7 @@ Token Lexer::scanIdentifier() {
     TokenType type = TOKEN_IDENTIFIER;
     if (keywords.find(lexeme) != keywords.end()) {
         type = keywords[lexeme];
+        return Token(type, reader->getLine());
     } else {
         // Kiểm tra tính hợp lệ của identifier
         bool valid = true;
@@ -155,11 +154,11 @@ Token Lexer::scanIdentifier() {
         }
         
         if (!valid) {
-            return Token(TOKEN_ERROR, "Invalid identifier: " + lexeme, reader->getLine());
+            return Token(TOKEN_ERROR, reader->getLine(), "Invalid identifier \'" + lexeme + "\'");
         }
+        
+        return Token(type, reader->getLine(), lexeme);
     }
-    
-    return Token(type, lexeme, reader->getLine());
 }
 
 Token Lexer::scanNumber() {
@@ -174,11 +173,11 @@ Token Lexer::scanNumber() {
             reader->advance();
         }
         
-        return Token(TOKEN_ERROR, "Invalid identifier starting with digit: " + reader->getLexeme(), reader->getLine());
+        return Token(TOKEN_ERROR, reader->getLine(), "Invalid number \'" + reader->getLexeme() + "\'");
     }
     
     // Lấy lexeme từ lexemeBegin đến forward
     string lexeme = reader->getLexeme();
     
-    return Token(TOKEN_NUMBER, lexeme, reader->getLine());
+    return Token(TOKEN_NUMBER, reader->getLine(), lexeme);
 }
