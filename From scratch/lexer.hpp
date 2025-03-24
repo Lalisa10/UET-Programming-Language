@@ -10,47 +10,15 @@ enum TokenType {
     TOKEN_IDENTIFIER, TOKEN_NUMBER,
     TOKEN_EOF, TOKEN_ERROR
 };
-
-string tokenTypeName(TokenType type) {
-    switch (type) {
-        case TOKEN_BEGIN: return "BEGIN";
-        case TOKEN_END: return "END";
-        case TOKEN_INT: return "INT";
-        case TOKEN_BOOL: return "BOOL";
-        case TOKEN_IF: return "IF";
-        case TOKEN_THEN: return "THEN";
-        case TOKEN_ELSE: return "ELSE";
-        case TOKEN_DO: return "DO";
-        case TOKEN_WHILE: return "WHILE";
-        case TOKEN_FOR: return "FOR";
-        case TOKEN_PRINT: return "PRINT";
-        case TOKEN_PLUS: return "PLUS";
-        case TOKEN_MULTIPLY: return "MULTIPLY";
-        case TOKEN_GREATER: return "GREATER";
-        case TOKEN_GREATER_EQUAL: return "GREATER_EQUAL";
-        case TOKEN_EQUAL: return "EQUAL";
-        case TOKEN_ASSIGN: return "ASSIGN";
-        case TOKEN_LEFT_PAREN: return "LEFT_PAREN";
-        case TOKEN_RIGHT_PAREN: return "RIGHT_PAREN";
-        case TOKEN_LEFT_BRACE: return "LEFT_BRACE";
-        case TOKEN_RIGHT_BRACE: return "RIGHT_BRACE";
-        case TOKEN_SEMICOLON: return "SEMICOLON";
-        case TOKEN_COMMA: return "COMMA";
-        case TOKEN_IDENTIFIER: return "IDENTIFIER";
-        case TOKEN_NUMBER: return "NUMBER";
-        case TOKEN_EOF: return "EOF";
-        case TOKEN_ERROR: return "ERROR";
-        default: return "UNKNOWN";
-    }
-}
+string tokenTypeName(TokenType type);
 
 struct Token {
     TokenType type;
-    string message;
+    string message, lexeme;
     int line;
     
-    Token(TokenType type, int line, const string& message = "")
-        : type(type), line(line), message(message) {}
+    Token(TokenType type, const string& lexeme, int line, const string& message = "")
+        : type(type), line(line), message(message), lexeme(lexeme) {}
 
     friend ostream& operator<<(ostream& os, const Token& token) {
         if (token.message.empty()) {
@@ -222,23 +190,3 @@ private:
     Token scanIdentifier();
     Token scanNumber();
 };
-
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " <input_file>" << endl;
-        return 1;
-    }
-    try {
-        freopen("lexer_output.txt", "w", stdout);
-
-        Lexer lexer(argv[1]);
-        vector<Token> tokens = lexer.scanTokens();
-        for (const Token& token : tokens) {
-            cout << token << endl;
-        }
-    } catch (const exception& e) {
-        cerr << e.what() << endl;
-        return 1;
-    }
-    return 0;
-}
