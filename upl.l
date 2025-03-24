@@ -7,12 +7,13 @@
 %option noyywrap
 
 /* 🔹 Regular Definitions */
-delim       [ \t\n]
-digit       [0-9]
-letter      [A-Za-z]
-id          {letter}+{digit}*
-number      {digit}+
-comment     "/*"([^*]|\*+[^*/])*\*+"/"|"//".*
+delim           [ \t\n]
+digit           [0-9]
+letter          [A-Za-z]
+candidate_id    [A-Za-z0-9]+
+true_id         {letter}+{digit}*
+number          {digit}+
+comment         "/*"([^*]|\*+[^*/])*\*+"/"|"//".*
 
 
 %%
@@ -58,8 +59,8 @@ comment     "/*"([^*]|\*+[^*/])*\*+"/"|"//".*
 "{"         {printf("OPEN_CURLY\n");}
 "}"         {printf("CLOSE_CURLY\n");}
 
-{id}        { printf("IDENTIFIER(%s)\n", yytext); }
-
+{true_id}        { printf("IDENTIFIER(%s)\n", yytext); }
+{candidate_id}   { printf("WRONG IDENTIFIER(%s)\n", yytext); }
 .           { printf("UNKNOWN(%s)\n", yytext); }
 
 %%
