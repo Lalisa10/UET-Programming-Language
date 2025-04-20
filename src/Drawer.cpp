@@ -75,9 +75,9 @@ void Drawer::drawTree(ParseTree tree, std::string name) {
     int result = system(command.c_str());
 
     if (result == 0) {
-        std::cerr << "✅ Đã tạo thành công\n";
+        std::cerr << "Parse tree picture was created successfully\n";
     } else {
-        std::cerr << "❌ Lỗi khi chạy lệnh dot. Kiểm tra xem bạn đã cài Graphviz chưa.\n";
+        std::cerr << "Failed to draw parse tree...\n";
     }
 }
 

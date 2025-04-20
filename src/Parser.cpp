@@ -48,8 +48,14 @@ ParsingState Parser::readInput(std::shared_ptr<Terminal> nextInput) {
         int productionId = reduceCell->getProductionId();
         int bodySize = productionList[productionId]->getBody().size();
         auto head = productionList[productionId]->getHead();
-
-        parseTree.reduce(std::make_shared<Node> (head->getRepresentation()), bodySize);
+        
+        if (bodySize == 0) { // epsilon
+            parseTree.addNode(std::make_shared<Node>("ε"));
+            parseTree.reduce(std::make_shared<Node> (head->getRepresentation()), 1);
+        } else {
+            parseTree.reduce(std::make_shared<Node> (head->getRepresentation()), bodySize);
+        }
+        
 
         while (bodySize --) {
             stack.pop();
