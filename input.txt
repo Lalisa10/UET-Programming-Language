@@ -1,10 +1,8 @@
 
 begin
 int x = 3;
-int y = 3
-if (x == y) then {
-	;
-else {
-	x = x3;
+bool y = false;
+for (int i = 1;; i = i + 1) {
+	if (i) then i; else i;
 }
 end
