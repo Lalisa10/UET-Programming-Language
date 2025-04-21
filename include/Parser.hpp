@@ -33,16 +33,19 @@ public:
     void addSymbol(std::shared_ptr<Symbol> t);
     // void addNonTerminal(std::shared_ptr<NonTerminal> nt);
     void addProduction(std::shared_ptr<Production> p);
+    void addSynchronizingToken(std::shared_ptr<Terminal> symbol);
     std::vector<std::shared_ptr<Production>> getProductionList() const;
     int getNoStates() const;
     int getNoSymbols() const;
     int getNoProductions() const;
+    bool isSynchronizingToken(std::shared_ptr<Terminal> symbol) const;
     ParsingState readInput(std::shared_ptr<Terminal> nextInput);
     ParseTree getParseTree() const;
 private:
     std::vector<ItemSet> stateList;
     std::vector<std::shared_ptr<Symbol>> symbolList;
     std::vector<std::shared_ptr<Production>> productionList;
+    std::vector<std::shared_ptr<Terminal>> synchronizingTokens; // used for panic mode recovery
     std::map<ItemSet, int> stateIndex;
     std::map<Symbol, int> symbolsIndex;
     std::map<Production, int> productionIndex;
@@ -58,6 +61,7 @@ private:
     // [i][j] mean action when in state i, meet terminal j-th.
     ParseTree parseTree;
     std::stack<int> stack;
+    std::stack<int> recoveryStack;
 
     void buildCanonicalCollection();
     void buildAutomaton();

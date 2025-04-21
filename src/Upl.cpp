@@ -174,6 +174,8 @@ namespace upl_grammar {
         parser.addSymbol(false_);
         parser.addSymbol(dollar);
 
+        parser.addSynchronizingToken(semicolon);
+
         for (auto prod : productionList) {
             parser.addProduction(prod);
         }
@@ -306,7 +308,7 @@ namespace upl_grammar {
                     accepted = true;
                     break;
                 case ERROR:
-                    std::cerr << "Wrong syntax at line " << current_token.line << "\n";
+                    std::cerr << "Wrong syntax at line " << current_token.line << " column " << current_token.col << "\n";
                     failed = true;
                     break;
                 default:
