@@ -38,7 +38,7 @@ void Drawer::drawTable(const std::vector<std::vector<std::string>>& table, std::
     out = std::ofstream(fileName);
 
     if (!out) {
-        std::cerr << "Không thể mở file để ghi.\n";
+        std::cerr << "Unable to open file to write table!.\n";
         return;
     }
 
@@ -50,7 +50,7 @@ void Drawer::drawTable(const std::vector<std::vector<std::string>>& table, std::
     }
 
     out.close();
-    std::cerr << "Đã ghi bảng ra file: " << fileName << "\n";
+    std::cerr << "Parsing Table exported successfully at: " << fileName << "\n";
 }
 
 void Drawer::write_dot(std::shared_ptr<Node> node, std::ofstream& out, int parent_id) {
@@ -75,7 +75,7 @@ void Drawer::drawTree(ParseTree tree, std::string name) {
     int result = system(command.c_str());
 
     if (result == 0) {
-        std::cerr << "Parse tree picture was created successfully\n";
+        std::cerr << "Parse tree picture was created successfully at " << name << ".png\n";
     } else {
         std::cerr << "Failed to draw parse tree...\n";
     }

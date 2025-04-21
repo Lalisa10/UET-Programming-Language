@@ -1,0 +1,17 @@
+Can't replace cell (3, 19) with s13! Already s13
+Can't replace cell (3, 26) with s17! Already s17
+Can't replace cell (13, 32) with s36! Already s36
+Can't replace cell (14, 19) with s13! Already s13
+Can't replace cell (14, 26) with s17! Already s17
+Can't replace cell (43, 19) with s13! Already s13
+Can't replace cell (43, 26) with s17! Already s17
+Can't replace cell (47, 33) with s56! Already s56
+Can't replace cell (56, 20) with s60! Already s60
+Can't replace cell (60, 19) with s13! Already s13
+Can't replace cell (60, 26) with s17! Already s17
+Can't replace cell (68, 19) with s13! Already s13
+Can't replace cell (68, 26) with s17! Already s17
+Can't replace cell (73, 19) with s13! Already s13
+Can't replace cell (73, 26) with s17! Already s17
+Can't replace cell (65, 21) with r7! Already s68
+Cell (1, 42) is not null but still okay!

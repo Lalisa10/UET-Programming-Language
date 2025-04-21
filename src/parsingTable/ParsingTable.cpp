@@ -15,7 +15,7 @@ ParsingTable::~ParsingTable() {
 
 bool ParsingTable::addGoTo(int r, int c, int stateId) {
     if (table[r][c]) {
-        std::cerr << "Attempting replace cell (" << r << ", " << c << ") with GoTo! Already " << table[r][c]->getType() << "\n";
+        std::cout << "Can't replace cell (" << r << ", " << c << ") with GoTo(" << stateId << ")! Already " << table[r][c]->toString() << "\n";
         return false;
     }
     table[r][c] = std::make_shared<GoToCell>(stateId);
@@ -24,7 +24,7 @@ bool ParsingTable::addGoTo(int r, int c, int stateId) {
 
 bool ParsingTable::addShift(int r, int c, int stateId) {
     if (table[r][c]) {
-        std::cerr << "Attempting replace cell (" << r << ", " << c << ") with Shift! Already " << table[r][c]->getType() << "\n";
+        std::cout << "Can't replace cell (" << r << ", " << c << ") with s" << stateId << "! Already " << table[r][c]->toString() << "\n";
         return false;
     }
     table[r][c] = std::make_shared<ShiftCell>(stateId);
@@ -33,7 +33,7 @@ bool ParsingTable::addShift(int r, int c, int stateId) {
 
 bool ParsingTable::addReduce(int r, int c, int productionId) {
     if (table[r][c]) {
-        std::cerr << "Attempting replace cell (" << r << ", " << c << ") with Reduce! Already " << table[r][c]->getType() << "\n";
+        std::cout << "Can't replace cell (" << r << ", " << c << ") with r" << productionId << "! Already " << table[r][c]->toString() << "\n";
         return false;
     }
     table[r][c] = std::make_shared<ReduceCell>(productionId);
@@ -42,7 +42,7 @@ bool ParsingTable::addReduce(int r, int c, int productionId) {
 
 bool ParsingTable::addAccept(int r, int c) {
     if (table[r][c]) {
-        std::cerr << "Cell (" << r << ", " << c << ") is not null but still okay!" << "\n";
+        std::cout << "Cell (" << r << ", " << c << ") is not null but still okay!" << "\n";
     }
     table[r][c] = std::make_shared<AcceptCell>();
     return true;

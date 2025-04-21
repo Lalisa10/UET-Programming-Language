@@ -179,7 +179,7 @@ comment                 "//".*
     return IDENTIFIER;
     }
 <INITIAL>{candidate_id}      { 
-    //printf("WRONG IDENTIFIER(%s)\n", yytext); 
+    std::cerr << "WRONG IDENTIFIER(" << yytext << ")\n"; 
     set_token(UNKNOWN, yytext);
     return UNKNOWN;
     }
@@ -188,11 +188,12 @@ comment                 "//".*
 <COMMENT><<EOF>>    { //printf("UNTERMINATED_COMMENT!\n");
                          exit(1);}
 <COMMENT>"*/"       { BEGIN(INITIAL); }
-<COMMENT>\n         { ++curr_line; }
+<COMMENT>\n         { curr_line++; curr_col = 1; }
+<COMMENT>[ \t]+     { curr_col += yyleng; }
 <COMMENT>.|\n       { /* Bỏ qua nội dung comment */ }
 
 .           { 
-    //printf("UNKNOWN(%s)\n", yytext);
+    std::cerr << "UNKNOWN(" << yytext << ")\n";
     set_token(UNKNOWN, yytext);
     return UNKNOWN;
     }

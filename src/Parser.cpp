@@ -30,8 +30,29 @@ ParsingState Parser::readInput(std::shared_ptr<Terminal> nextInput) {
     int currentState = stack.top();
     std::shared_ptr<Cell> behavior = parsingTable.getCell(currentState, symbolsIndex[*nextInput]);
 
-    if (!behavior) return ERROR;
-    
+    if (!behavior) {
+        std::vector<std::shared_ptr<Symbol>> recommendList;
+
+        for (auto symbol : symbolList) {
+            if (!symbol->isTerminal()) continue;
+            std::shared_ptr<Cell> cell = parsingTable.getCell(currentState, symbolsIndex[*symbol]);
+            if (!cell) continue;
+            recommendList.push_back(symbol);
+        }
+
+        std::cerr << "Expected ";
+        std::cerr << "'" << *recommendList[0] << "'";
+        for (int i = 1; i < recommendList.size(); i ++) std::cerr << " or " << "'" << *recommendList[i] << "'";
+        std::cerr << " but found " << "'" << *nextInput << "'\n";
+
+        //stack = recoveryStack;
+        return ERROR;
+    }
+
+    // if (isSynchronizingToken(nextInput)) {
+    //     recoveryStack = stack;
+    // }
+
     if (behavior->getType() == "shift") {
 
         std::shared_ptr<ShiftCell> shiftCell = std::dynamic_pointer_cast<ShiftCell>(behavior);
@@ -79,6 +100,7 @@ ParsingState Parser::readInput(std::shared_ptr<Terminal> nextInput) {
         auto stack = parseTree.getStack();
         return ACCEPT;
     }
+    assert(1);
     return ERROR;
 }
 
@@ -151,7 +173,7 @@ void Parser::buildParsingTable() {
     buildCanonicalCollection();
     buildAutomaton();
     parsingTable = ParsingTable(getNoStates(), getNoSymbols());
-    std::cerr << getNoStates() << " " << getNoSymbols() << "\n";
+    //std::cerr << getNoStates() << " " << getNoSymbols() << "\n";
      /*
      (a) If [A -> (alpha).a(beta) ] is in Ii and GOTO(I_i,a) = I_j , then set ACTION[i, a] to
      "shift j". Here a must be a terminal.
@@ -516,4 +538,15 @@ int Parser::getNoProductions() const {
 
 ParseTree Parser::getParseTree() const {
     return parseTree;
+}
+
+void Parser::addSynchronizingToken(std::shared_ptr<Terminal> symbol) {
+    synchronizingTokens.push_back(symbol);
+}
+
+bool Parser::isSynchronizingToken(std::shared_ptr<Terminal> symbol) const {
+    for (auto s : synchronizingTokens) {
+        if (s->getRepresentation() == symbol->getRepresentation()) return true;
+    }
+    return false;
 }
